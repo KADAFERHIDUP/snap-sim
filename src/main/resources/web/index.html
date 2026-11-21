@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>snap-sim · Simulator Open API SNAP</title>
+  <meta name="description" content="Simulator Open API SNAP Bank Indonesia: token B2B bertanda tangan RSA, transaksi bertanda tangan HMAC-SHA512, cek saldo, cek rekening, transfer intrabank, dan cek status.">
+  <meta name="author" content="Ahmad Umraithi">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="mast">
+    <div class="mast-in">
+      <p class="brand">snap-sim</p>
+      <h1>Open API SNAP, ditandatangani di browser kamu.</h1>
+      <p class="lede">Simulator standar Open API pembayaran Bank Indonesia. Kunci privat RSA dibuat di browser ini dan tidak pernah dikirim. Server hanya memegang kunci publik, lalu memeriksa setiap tanda tangan, cap waktu, dan X-EXTERNAL-ID.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="flow" aria-label="Alur integrasi">
+      <article class="step" id="s1">
+        <header><span class="n">1</span><h2>Buat sandbox</h2></header>
+        <p>Browser membuat pasangan kunci RSA 2048 bit. Hanya kunci publiknya yang didaftarkan. Kamu dapat client key, client secret, dan dua rekening berisi saldo.</p>
+        <button type="button" class="btn" id="b-sandbox">Buat sandbox</button>
+        <dl class="facts" id="sandbox-facts" hidden>
+          <div><dt>Client key</dt><dd class="mono" id="f-client"></dd></div>
+          <div><dt>Client secret</dt><dd class="mono" id="f-secret"></dd></div>
+          <div><dt>Rekening kamu</dt><dd id="f-accounts"></dd></div>
+          <div><dt>Rekening tujuan</dt><dd id="f-benef"></dd></div>
+        </dl>
+      </article>
+
+      <article class="step" id="s2">
+        <header><span class="n">2</span><h2>Minta token B2B</h2><span class="svc">layanan 73</span></header>
+        <p>Tanda tangan <code>SHA256withRSA</code> atas <code>clientKey|X-TIMESTAMP</code> dengan kunci privat. Token berlaku 900 detik.</p>
+        <button type="button" class="btn" id="b-token" disabled>Minta token</button>
+        <p class="hint" id="token-left"></p>
+      </article>
+
+      <article class="step" id="s3">
+        <header><span class="n">3</span><h2>Cek saldo</h2><span class="svc">layanan 11</span></header>
+        <label>Rekening <select id="i-bal-acc"></select></label>
+        <button type="button" class="btn" id="b-balance" disabled>Cek saldo</button>
+      </article>
+
+      <article class="step" id="s4">
+        <header><span class="n">4</span><h2>Cek rekening tujuan</h2><span class="svc">layanan 15</span></header>
+        <label>Nomor rekening <input id="i-inq-acc" inputmode="numeric" autocomplete="off" maxlength="20"></label>
+        <button type="button" class="btn" id="b-inquiry" disabled>Cek rekening</button>
+      </article>
+
+      <article class="step" id="s5">
+        <header><span class="n">5</span><h2>Transfer intrabank</h2><span class="svc">layanan 17</span></header>
+        <div class="grid2">
+          <label>Dari <select id="i-tr-src"></select></label>
+          <label>Ke <input id="i-tr-dst" inputmode="numeric" autocomplete="off" maxlength="20"></label>
+          <label>Nominal (Rp) <input id="i-tr-amt" inputmode="decimal" autocomplete="off" value="150000.00"></label>
+          <label>Berita <input id="i-tr-remark" maxlength="50" value="Bayar invoice"></label>
+        </div>
+        <label>partnerReferenceNo <input id="i-tr-ref" class="mono" maxlength="64"></label>
+        <p class="hint">Kirim ulang dengan nomor referensi yang sama: saldo tidak terpotong dua kali.</p>
+        <button type="button" class="btn" id="b-transfer" disabled>Kirim transfer</button>
+      </article>
+
+      <article class="step" id="s6">
+        <header><span class="n">6</span><h2>Cek status transfer</h2><span class="svc">layanan 36</span></header>
+        <label>originalPartnerReferenceNo <input id="i-st-ref" class="mono" maxlength="64"></label>
+        <button type="button" class="btn" id="b-status" disabled>Cek status</button>
+      </article>
+
+      <article class="step attack" id="s7">
+        <header><h2>Coba bobol</h2></header>
+        <p>Setiap percobaan di bawah dikirim ke server sungguhan. Lihat kode respons yang menolaknya.</p>
+        <div class="attacks">
+          <button type="button" class="btn ghost" id="x-replay" disabled>Kirim ulang X-EXTERNAL-ID</button>
+          <button type="button" class="btn ghost" id="x-tamper" disabled>Ubah nominal setelah ditandatangani</button>
+          <button type="button" class="btn ghost" id="x-token" disabled>Pakai token palsu</button>
+          <button type="button" class="btn ghost" id="x-peek" disabled>Intip saldo rekening orang lain</button>
+          <button type="button" class="btn ghost" id="x-dormant" disabled>Transfer ke rekening dormant</button>
+        </div>
+      </article>
+    </section>
+
+    <aside class="inspector" aria-live="polite" aria-label="Isi permintaan dan respons terakhir">
+      <div class="ins-empty" id="ins-empty">Mulai dari langkah 1. Setiap permintaan yang dikirim akan dibongkar di sini: string yang ditandatangani, header, body, dan arti kode responsnya.</div>
+      <div id="ins" hidden>
+        <p class="req-line mono"><span id="r-method"></span> <span id="r-path"></span></p>
+        <h3>String yang ditandatangani</h3>
+        <div class="sts" id="r-sts"></div>
+        <p class="algo mono" id="r-algo"></p>
+        <h3>Header</h3>
+        <table class="hdr mono"><tbody id="r-headers"></tbody></table>
+        <h3>Body</h3>
+        <pre class="code" id="r-body"></pre>
+        <h3>Respons <span class="status" id="r-status"></span></h3>
+        <div class="code-parts" id="r-code"></div>
+        <pre class="code" id="r-res"></pre>
+        <details>
+          <summary>Sebagai perintah curl</summary>
+          <pre class="code" id="r-curl"></pre>
+        </details>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="foot">
+    <p><strong>Ahmad Umraithi</strong>, Teknik Informatika Universitas Malikussaleh. Simulator untuk belajar, bukan layanan bank sungguhan.</p>
+    <p><a href="https://github.com/KADAFERHIDUP/snap-sim">Kode di GitHub</a> · <a href="https://www.linkedin.com/in/ahmadumraithi/">LinkedIn</a></p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
