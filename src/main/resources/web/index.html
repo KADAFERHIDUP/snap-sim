@@ -9,21 +9,57 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <header class="mast">
-    <div class="mast-in">
-      <p class="brand">snap-sim</p>
-      <h1>Open API SNAP, ditandatangani di browser kamu.</h1>
-      <p class="lede">Simulator standar Open API pembayaran Bank Indonesia. Kunci privat RSA dibuat di browser ini dan tidak pernah dikirim. Server hanya memegang kunci publik, lalu memeriksa setiap tanda tangan, cap waktu, dan X-EXTERNAL-ID.</p>
-    </div>
-  </header>
+  <div class="shell">
+    <header class="top">
+      <a class="logo" href="#" aria-label="snap-sim, ke atas">
+        <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8"/><path d="M16 7l2 2"/><path d="M14 9l2 2"/></svg></span>
+        <span class="logo-name">snap-sim</span>
+      </a>
+      <p class="top-note">Kunci privat RSA dibuat di browser ini dan tidak pernah dikirim</p>
+      <div class="top-right">
+        <a class="gh" href="https://github.com/KADAFERHIDUP/snap-sim" aria-label="Kode di GitHub" title="Kode di GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/></svg></a>
+        <span class="avatar" title="Ahmad Umraithi" aria-label="Ahmad Umraithi">AU</span>
+      </div>
+    </header>
 
-  <main class="layout">
+    <section class="hero" aria-labelledby="hero-h">
+      <div>
+        <h1 id="hero-h">Open API SNAP,<br><mark>ditandatangani</mark> di browser kamu.</h1>
+        <p>Simulator standar Open API pembayaran Bank Indonesia. Server hanya memegang kunci publik, lalu memeriksa setiap tanda tangan, cap waktu, dan X-EXTERNAL-ID.</p>
+      </div>
+      <svg class="hero-art" viewBox="0 0 460 220" aria-hidden="true">
+        <defs>
+          <linearGradient id="ss-paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef3e6"/></linearGradient>
+          <linearGradient id="ss-key" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9ff9c"/><stop offset=".55" stop-color="#b8ec2c"/><stop offset="1" stop-color="#6fb515"/></linearGradient>
+          <linearGradient id="ss-edge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc31c"/><stop offset="1" stop-color="#3f7a0c"/></linearGradient>
+        </defs>
+        <g transform="translate(70 30) rotate(-7)">
+          <rect width="170" height="170" rx="20" fill="url(#ss-paper)" stroke="#dfe7d2" stroke-width="2"/>
+          <rect x="20" y="24" width="64" height="10" rx="5" fill="#cfe89a"/>
+          <rect x="20" y="50" width="40" height="18" rx="6" fill="#6b3fa0" opacity=".85"/>
+          <rect x="64" y="50" width="86" height="18" rx="6" fill="#1c5fa8" opacity=".85"/>
+          <rect x="20" y="74" width="70" height="18" rx="6" fill="#9a5b00" opacity=".85"/>
+          <rect x="94" y="74" width="56" height="18" rx="6" fill="#0f7b6c" opacity=".85"/>
+          <rect x="20" y="98" width="60" height="18" rx="6" fill="#b42318" opacity=".85"/>
+          <path d="M24 146c14-14 22 8 34-6s20 6 32-4" fill="none" stroke="#1d2a08" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="140" cy="140" r="16" fill="#1d2a08"/>
+          <path d="M133 140l5 5 9-10" stroke="#c4f135" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(250 64) rotate(-18)">
+          <g transform="translate(5 9)" fill="url(#ss-edge)"><circle cx="44" cy="44" r="40"/><rect x="72" y="34" width="118" height="22" rx="8"/><rect x="152" y="50" width="16" height="30" rx="5"/><rect x="174" y="50" width="16" height="24" rx="5"/></g>
+          <g fill="url(#ss-key)"><circle cx="44" cy="44" r="40"/><rect x="72" y="34" width="118" height="22" rx="8"/><rect x="152" y="50" width="16" height="30" rx="5"/><rect x="174" y="50" width="16" height="24" rx="5"/></g>
+          <circle cx="44" cy="44" r="15" fill="#f6ffd9"/>
+        </g>
+      </svg>
+    </section>
+
+    <main class="layout">
     <section class="flow" aria-label="Alur integrasi">
-      <article class="step" id="s1">
+      <article class="step card" id="s1">
         <header><span class="n">1</span><h2>Buat sandbox</h2></header>
         <p>Browser membuat pasangan kunci RSA 2048 bit. Hanya kunci publiknya yang didaftarkan. Kamu dapat client key, client secret, dan dua rekening berisi saldo.</p>
         <button type="button" class="btn" id="b-sandbox">Buat sandbox</button>
@@ -35,26 +71,26 @@
         </dl>
       </article>
 
-      <article class="step" id="s2">
+      <article class="step card" id="s2">
         <header><span class="n">2</span><h2>Minta token B2B</h2><span class="svc">layanan 73</span></header>
         <p>Tanda tangan <code>SHA256withRSA</code> atas <code>clientKey|X-TIMESTAMP</code> dengan kunci privat. Token berlaku 900 detik.</p>
         <button type="button" class="btn" id="b-token" disabled>Minta token</button>
         <p class="hint" id="token-left"></p>
       </article>
 
-      <article class="step" id="s3">
+      <article class="step card" id="s3">
         <header><span class="n">3</span><h2>Cek saldo</h2><span class="svc">layanan 11</span></header>
         <label>Rekening <select id="i-bal-acc"></select></label>
         <button type="button" class="btn" id="b-balance" disabled>Cek saldo</button>
       </article>
 
-      <article class="step" id="s4">
+      <article class="step card" id="s4">
         <header><span class="n">4</span><h2>Cek rekening tujuan</h2><span class="svc">layanan 15</span></header>
         <label>Nomor rekening <input id="i-inq-acc" inputmode="numeric" autocomplete="off" maxlength="20"></label>
         <button type="button" class="btn" id="b-inquiry" disabled>Cek rekening</button>
       </article>
 
-      <article class="step" id="s5">
+      <article class="step card" id="s5">
         <header><span class="n">5</span><h2>Transfer intrabank</h2><span class="svc">layanan 17</span></header>
         <div class="grid2">
           <label>Dari <select id="i-tr-src"></select></label>
@@ -67,26 +103,26 @@
         <button type="button" class="btn" id="b-transfer" disabled>Kirim transfer</button>
       </article>
 
-      <article class="step" id="s6">
+      <article class="step card" id="s6">
         <header><span class="n">6</span><h2>Cek status transfer</h2><span class="svc">layanan 36</span></header>
         <label>originalPartnerReferenceNo <input id="i-st-ref" class="mono" maxlength="64"></label>
         <button type="button" class="btn" id="b-status" disabled>Cek status</button>
       </article>
 
-      <article class="step attack" id="s7">
+      <article class="step card attack" id="s7">
         <header><h2>Coba bobol</h2></header>
         <p>Setiap percobaan di bawah dikirim ke server sungguhan. Lihat kode respons yang menolaknya.</p>
         <div class="attacks">
-          <button type="button" class="btn ghost" id="x-replay" disabled>Kirim ulang X-EXTERNAL-ID</button>
-          <button type="button" class="btn ghost" id="x-tamper" disabled>Ubah nominal setelah ditandatangani</button>
-          <button type="button" class="btn ghost" id="x-token" disabled>Pakai token palsu</button>
-          <button type="button" class="btn ghost" id="x-peek" disabled>Intip saldo rekening orang lain</button>
-          <button type="button" class="btn ghost" id="x-dormant" disabled>Transfer ke rekening dormant</button>
+          <button type="button" class="btn try" id="x-replay" disabled>Kirim ulang X-EXTERNAL-ID</button>
+          <button type="button" class="btn try" id="x-tamper" disabled>Ubah nominal setelah ditandatangani</button>
+          <button type="button" class="btn try" id="x-token" disabled>Pakai token palsu</button>
+          <button type="button" class="btn try" id="x-peek" disabled>Intip saldo rekening orang lain</button>
+          <button type="button" class="btn try" id="x-dormant" disabled>Transfer ke rekening dormant</button>
         </div>
       </article>
     </section>
 
-    <aside class="inspector" aria-live="polite" aria-label="Isi permintaan dan respons terakhir">
+    <aside class="inspector card" aria-live="polite" aria-label="Isi permintaan dan respons terakhir">
       <div class="ins-empty" id="ins-empty">Mulai dari langkah 1. Setiap permintaan yang dikirim akan dibongkar di sini: string yang ditandatangani, header, body, dan arti kode responsnya.</div>
       <div id="ins" hidden>
         <p class="req-line mono"><span id="r-method"></span> <span id="r-path"></span></p>
@@ -106,7 +142,8 @@
         </details>
       </div>
     </aside>
-  </main>
+    </main>
+  </div>
 
   <footer class="foot">
     <p><strong>Ahmad Umraithi</strong>, Teknik Informatika Universitas Malikussaleh. Simulator untuk belajar, bukan layanan bank sungguhan.</p>
