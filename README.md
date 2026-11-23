@@ -1,5 +1,9 @@
 # snap-sim
 
+**Demo langsung:** <https://snap-sim-465d7.containers.snapdeploy.app>
+
+> Server demo memakai paket gratis SnapDeploy yang tidur setelah 15 menit tanpa pengunjung. Kunjungan pertama menampilkan halaman "Waking up your container" sekitar satu menit, lalu konsolnya terbuka sendiri.
+
 Simulator **Open API SNAP** (Standar Nasional Open API Pembayaran) Bank Indonesia. Kamu bisa mencoba alur integrasi lengkap dari browser: daftar sebagai partner, minta token B2B, cek saldo, cek rekening tujuan, transfer intrabank, lalu cek status transfernya. Semua permintaan ditandatangani persis seperti yang diminta bank-bank di Indonesia.
 
 Kunci privat RSA dibuat di browser (WebCrypto, *non-extractable*) dan tidak pernah dikirim. Server hanya menyimpan kunci publik.
@@ -88,6 +92,12 @@ Kode respons 7 digit = HTTP + kode layanan + kode kasus. Contoh:
 Rekening tujuan bersama: `8800112233` dan `8800445566` (aktif), `8800778899` (dormant).
 
 ## Menjalankan
+
+### Online
+
+Versi online berjalan di [SnapDeploy](https://snapdeploy.dev) dari `Dockerfile` di repo ini, dan setiap push ke `main` memicu deploy ulang otomatis. Buka alamat demo di atas, tekan **Buat sandbox**, lalu ikuti langkah 1 sampai 6. Untuk mencoba lewat kode, ganti `localhost:8080` di contoh mana pun menjadi `https://snap-sim-465d7.containers.snapdeploy.app`.
+
+### Di komputer sendiri
 
 Butuh Java 21 dan Maven.
 
